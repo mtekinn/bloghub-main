@@ -10,6 +10,16 @@ import java.util.Optional;
 public class UserRepository {
 
     private List<User> userList = new ArrayList<>();
+    private static UserRepository instance;
+
+    private UserRepository() {}
+
+    public static UserRepository getInstance() {
+        if (instance == null) {
+            instance = new UserRepository();
+        }
+        return instance;
+    }
 
     public void save(User user) {
         userList.add(user);

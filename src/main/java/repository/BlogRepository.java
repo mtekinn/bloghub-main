@@ -10,9 +10,23 @@ import java.util.Optional;
 public class BlogRepository {
 
     private List<Blog> blogList = new ArrayList<>();
+    private static BlogRepository instance;
+
+    private BlogRepository() {}
 
     public void save(Blog blog) {
         blogList.add(blog);
+    }
+
+    public List<Blog> getAllBlogs() {
+        return blogList;
+    }
+
+    public static BlogRepository getInstance() {
+        if (instance == null) {
+            instance = new BlogRepository();
+        }
+        return instance;
     }
 
     public Optional<Blog> findByTitle(String title) {

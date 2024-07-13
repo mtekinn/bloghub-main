@@ -6,6 +6,7 @@ import model.enums.UserType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 public class User {
 
@@ -17,22 +18,20 @@ public class User {
     private StatusType statusType;
     private Set<SocialMedia> socialMediaList;
     private List<Blog> blogList;
-    private List<BlogTag> followedTagList = new ArrayList<>();
+    private List<BlogTag> followedTagList;
 
     public User() {
         userType = UserType.STANDARD;
+        socialMediaList = new HashSet<>();
+        blogList = new ArrayList<>();
+        followedTagList = new ArrayList<>();
     }
 
-    /*
-    public User(UserType userType) {
-        this.userType = userType;
-    }*/
-
     public User(String email, String password) {
-        this.userType = UserType.STANDARD;
-        this.statusType = StatusType.WAITING_APPROVAL;
+        this();
         this.email = email;
         this.password = password;
+        this.statusType = StatusType.WAITING_APPROVAL;
     }
 
     public String getName() {

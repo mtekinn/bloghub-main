@@ -15,6 +15,7 @@ public class Blog {
     private BlogStatus blogStatus;
     private Long likeCount;
     private List<BlogComment> blogCommentList = new ArrayList<>();
+    private Long viewCount;
 
     public Blog(String title, String text, User user) {
         this.title = title;
@@ -80,6 +81,10 @@ public class Blog {
     public void setBlogCommentList(List<BlogComment> blogCommentList) {
         this.blogCommentList = blogCommentList;
     }
+
+    public Long getViewCount() { return viewCount; }
+
+    public void setViewCount(Long viewCount) { this.viewCount = viewCount; }
 
     @Override
     public String toString() {

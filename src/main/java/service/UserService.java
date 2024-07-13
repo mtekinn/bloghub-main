@@ -3,60 +3,44 @@ package service;
 import model.User;
 import model.enums.StatusType;
 import repository.UserRepository;
+import utils.PasswordUtil;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UserService {
-
-    private UserRepository userRepository = new UserRepository();
+    private UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User saveUser(String email, String password) {
-
-        User user = new User(email, password); // ödev password' hash'le
-
+    public void saveUser(String email, String password) {
+        String hashedPassword = PasswordUtil.hashPassword(password);
+        User user = new User(email, hashedPassword);
         userRepository.save(user);
-
-        return user;
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("user bulunamadı"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public void changeStatus(String email, StatusType statusType) {
+        User user = getUserByEmail(email);
+        user.setStatusType(statusType);
+    }
+
+    public void changeStatus(List<String> emails, StatusType statusType) {
+        emails.forEach(email -> changeStatus(email, statusType));
     }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public void changeStatus(String email, StatusType statusType) {
-        getUserByEmail(email).setStatusType(statusType);
-    }
-
-    public void changeStatus(List<String> emailList, StatusType statusType) {
-
-        Map<String, User> allUsersMap = getAllUsersMap();
-
-        emailList.forEach(email -> {
-
-            User user = allUsersMap.get(email);
-            user.setStatusType(statusType);
-        });
-
-    }
-
-    public void changeStatus2(List<String> emailList, StatusType statusType) {
-        emailList.forEach(email -> changeStatus(email, statusType));
-    }
-
     public Map<String, User> getAllUsersMap() {
-        return getAllUsers().stream()
-                .collect(Collectors.toMap(User::getEmail, Function.identity()));
+        return userRepository.findAll().stream()
+                .collect(Collectors.toMap(User::getEmail, user -> user));
     }
 }
