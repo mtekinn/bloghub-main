@@ -57,7 +57,6 @@ public class Main {
         blogService.addComment("başlık", "çok kötü olmuş", foundUser);
 
         //ödev. kullanıcın takip ettiği tag'lere göre blog'lar gelmeli
-
         blogService.changeBlogStatus(BlogStatus.DELETED, "başlık");
 
         // Blogları sıralama
